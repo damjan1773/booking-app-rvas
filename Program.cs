@@ -10,6 +10,7 @@ builder.Services.Configure<MongoDbSettings>(
 
 // Registracija servisa
 builder.Services.AddSingleton<UserService>();
+builder.Services.AddSingleton<AccommodationService>();
 
 // Cookie autentifikacija
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
