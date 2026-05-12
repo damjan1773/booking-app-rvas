@@ -8,6 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<MongoDbSettings>(
     builder.Configuration.GetSection("MongoDB"));
 
+builder.Services.AddSingleton<MongoDB.Driver.IMongoClient>(s =>
+    new MongoDB.Driver.MongoClient(
+        builder.Configuration["MongoDB:ConnectionString"]));
+
 // Registracija servisa
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<AccommodationService>();
