@@ -28,8 +28,15 @@ public class AccommodationController : Controller {
 
     [HttpPost]
     [Authorize(Roles = "Owner")]
-    public IActionResult Create(Accommodation accommodation, IFormFile? image) {
+    public IActionResult Create(Accommodation accommodation, IFormFile? image, string? amenitiesInput) {
         accommodation.OwnerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (!string.IsNullOrEmpty(amenitiesInput)) {
+            accommodation.Amenities = amenitiesInput
+                .Split(',')
+                .Select(a => a.Trim())
+                .ToList();
+        }
 
         if (image != null) {
             var path = Path.Combine("wwwroot/uploads", image.FileName);
@@ -61,16 +68,12 @@ public class AccommodationController : Controller {
         return RedirectToAction("Index");
     }
 
-        [Authorize(Roles = "Owner")]
-        public IActionResult Delete(string id) {
-            var ownerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var existing = _service.GetById(id);
-            if (existing.OwnerId != ownerId) return Forbid();
-            _service.Delete(id);
-            return RedirectToAction("Index");
-        }
-
-
-
-
+    [Authorize(Roles = "Owner")]
+    public IActionResult Delete(string id) {
+        var ownerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var existing = _service.GetById(id);
+        if (existing.OwnerId != ownerId) return Forbid();
+        _service.Delete(id);
+        return RedirectToAction("Index");
+    }
 }
