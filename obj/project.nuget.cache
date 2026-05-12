@@ -1,0 +1,42 @@
+{
+  "version": 2,
+  "dgSpecHash": "0bDydJh10oA=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\damjan\\Desktop\\BookingApp\\BookingApp.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\damjan\\.nuget\\packages\\bcrypt.net-next\\4.2.0\\bcrypt.net-next.4.2.0.nupkg.sha512",
+    "C:\\Users\\damjan\\.nuget\\packages\\dnsclient\\1.6.1\\dnsclient.1.6.1.nupkg.sha512",
+    "C:\\Users\\damjan\\.nuget\\packages\\microsoft.aspnetcore.authentication.cookies\\2.3.9\\microsoft.aspnetcore.authentication.cookies.2.3.9.nupkg.sha512",
+    "C:\\Users\\damjan\\.nuget\\packages\\mongodb.bson\\3.8.1\\mongodb.bson.3.8.1.nupkg.sha512",
+    "C:\\Users\\damjan\\.nuget\\packages\\mongodb.driver\\3.8.1\\mongodb.driver.3.8.1.nupkg.sha512",
+    "C:\\Users\\damjan\\.nuget\\packages\\sharpcompress\\0.30.1\\sharpcompress.0.30.1.nupkg.sha512",
+    "C:\\Users\\damjan\\.nuget\\packages\\snappier\\1.3.1\\snappier.1.3.1.nupkg.sha512",
+    "C:\\Users\\damjan\\.nuget\\packages\\zstdsharp.port\\0.7.3\\zstdsharp.port.0.7.3.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1510",
+      "level": "Warning",
+      "message": "PackageReference Microsoft.AspNetCore.Authentication.Cookies will not be pruned. Consider removing this package from your dependencies, as it is likely unnecessary.",
+      "projectPath": "C:\\Users\\damjan\\Desktop\\BookingApp\\BookingApp.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\damjan\\Desktop\\BookingApp\\BookingApp.csproj",
+      "libraryId": "Microsoft.AspNetCore.Authentication.Cookies",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    },
+    {
+      "code": "NU1902",
+      "level": "Warning",
+      "message": "Package 'SharpCompress' 0.30.1 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-6c8g-7p36-r338",
+      "projectPath": "C:\\Users\\damjan\\Desktop\\BookingApp\\BookingApp.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\damjan\\Desktop\\BookingApp\\BookingApp.csproj",
+      "libraryId": "SharpCompress",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    }
+  ]
+}
