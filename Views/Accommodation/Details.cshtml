@@ -1,0 +1,50 @@
+@model Accommodation
+
+<div class="container mt-4">
+    <div class="card shadow">
+        @if (Model.ImagePaths.Any()) {
+            <img src="@Model.ImagePaths[0]" class="card-img-top" style="height:350px; object-fit:cover;">
+        }
+        <div class="card-body">
+            <h2 class="card-title">@Model.Name</h2>
+            <p class="text-muted">📍 @Model.Location</p>
+            <hr />
+            <p>@Model.Description</p>
+            <h4 class="text-success">💰 @Model.PricePerNight €/noć</h4>
+
+            @if (Model.Amenities.Any()) {
+                <hr />
+                <h5>Pogodnosti:</h5>
+                <div class="d-flex flex-wrap gap-2">
+                    @foreach (var amenity in Model.Amenities) {
+                        <span class="badge bg-secondary fs-6">@amenity</span>
+                    }
+                </div>
+            }
+
+            @if (Model.ImagePaths.Count > 1) {
+                <hr />
+                <h5>Galerija:</h5>
+                <div class="row">
+                    @foreach (var img in Model.ImagePaths.Skip(1)) {
+                        <div class="col-md-4 mb-3">
+                            <img src="@img" class="img-fluid rounded shadow-sm">
+                        </div>
+                    }
+                </div>
+            }
+
+            <hr />
+            <div class="d-flex gap-2">
+                <a href="/Accommodation/Index" class="btn btn-secondary">Nazad</a>
+                @if (User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value == "Guest") {
+                    <a href="/Reservation/Create/@Model.Id" class="btn btn-success">Rezerviši</a>
+                }
+                @if (User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value == "Owner") {
+                    <a href="/Accommodation/Edit/@Model.Id" class="btn btn-warning">Izmeni</a>
+                    <a href="/Accommodation/Delete/@Model.Id" class="btn btn-danger">Obriši</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
