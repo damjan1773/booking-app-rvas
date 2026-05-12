@@ -61,13 +61,16 @@ public class AccommodationController : Controller {
         return RedirectToAction("Index");
     }
 
-    [HttpPost]
-    [Authorize(Roles = "Owner")]
-    public IActionResult Delete(string id) {
-        var ownerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var existing = _service.GetById(id);
-        if (existing.OwnerId != ownerId) return Forbid();
-        _service.Delete(id);
-        return RedirectToAction("Index");
-    }
+        [Authorize(Roles = "Owner")]
+        public IActionResult Delete(string id) {
+            var ownerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var existing = _service.GetById(id);
+            if (existing.OwnerId != ownerId) return Forbid();
+            _service.Delete(id);
+            return RedirectToAction("Index");
+        }
+
+
+
+
 }

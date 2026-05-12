@@ -14,6 +14,10 @@
                         <p class="card-text">📍 @item.Location</p>
                         <p class="card-text">💰 @item.PricePerNight €/noć</p>
                         <a href="/Accommodation/Details/@item.Id" class="btn btn-primary">Detalji</a>
+                        @if (User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value == "Owner") {
+                            <a href="/Accommodation/Edit/@item.Id" class="btn btn-warning">Izmeni</a>
+                            <a href="/Accommodation/Delete/@item.Id" class="btn btn-danger">Obriši</a>
+                        }
                     </div>
                 </div>
             </div>
