@@ -1,0 +1,22 @@
+@model List<Accommodation>
+
+<div class="container mt-4">
+    <h2>Svi smeštaji</h2>
+    <div class="row">
+        @foreach (var item in Model) {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    @if (item.ImagePaths.Any()) {
+                        <img src="@item.ImagePaths[0]" class="card-img-top" style="height:200px; object-fit:cover;">
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text">📍 @item.Location</p>
+                        <p class="card-text">💰 @item.PricePerNight €/noć</p>
+                        <a href="/Accommodation/Details/@item.Id" class="btn btn-primary">Detalji</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

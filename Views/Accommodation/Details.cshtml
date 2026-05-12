@@ -1,0 +1,30 @@
+@model Accommodation
+
+<div class="container mt-4">
+    <h2>@Model.Name</h2>
+    <p>📍 @Model.Location</p>
+    <p>@Model.Description</p>
+    <p>💰 <strong>@Model.PricePerNight €/noć</strong></p>
+
+    <h5>Pogodnosti:</h5>
+    <ul>
+        @foreach (var amenity in Model.Amenities) {
+            <li>@amenity</li>
+        }
+    </ul>
+
+    @if (Model.ImagePaths.Any()) {
+        <h5>Galerija:</h5>
+        <div class="row">
+            @foreach (var img in Model.ImagePaths) {
+                <div class="col-md-4 mb-3">
+                    <img src="@img" class="img-fluid rounded">
+                </div>
+            }
+        </div>
+    }
+
+    @if (User.IsInRole("Guest")) {
+        <a href="/Reservation/Create/@Model.Id" class="btn btn-success mt-3">Rezerviši</a>
+    }
+</div>

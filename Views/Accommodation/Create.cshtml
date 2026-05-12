@@ -1,0 +1,29 @@
+@model Accommodation
+
+<div class="container mt-4">
+    <h2>Dodaj smeštaj</h2>
+    <form method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label>Naziv</label>
+            <input asp-for="Name" class="form-control" required />
+        </div>
+        <div class="mb-3">
+            <label>Lokacija</label>
+            <input asp-for="Location" class="form-control" required />
+        </div>
+        <div class="mb-3">
+            <label>Opis</label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+        </div>
+        <div class="mb-3">
+            <label>Cena po noći (€)</label>
+            <input asp-for="PricePerNight" type="number" class="form-control" required />
+        </div>
+        <div class="mb-3">
+            <label>Slika</label>
+            <input type="file" name="image" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Dodaj</button>
+        <a href="/Accommodation/Index" class="btn btn-secondary">Nazad</a>
+    </form>
+</div>
