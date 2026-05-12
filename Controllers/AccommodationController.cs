@@ -57,16 +57,26 @@ public class AccommodationController : Controller {
         return View(accommodation);
     }
 
-    [HttpPost]
-    [Authorize(Roles = "Owner")]
-    public IActionResult Edit(string id, Accommodation updated) {
-        var ownerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var existing = _service.GetById(id);
-        if (existing.OwnerId != ownerId) return Forbid();
-        updated.OwnerId = ownerId;
-        _service.Update(id, updated);
-        return RedirectToAction("Index");
-    }
+        [HttpPost]
+        [Authorize(Roles = "Owner")]
+        public IActionResult Edit(string id, Accommodation updated, IFormFile? image) {
+            var ownerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var existing = _service.GetById(id);
+            if (existing.OwnerId != ownerId) return Forbid();
+            
+            updated.OwnerId = ownerId;
+            updated.ImagePaths = existing.ImagePaths; // čuvamo stare slike
+
+            if (image != null) {
+                var path = Path.Combine("wwwroot/uploads", image.FileName);
+                using var stream = new FileStream(path, FileMode.Create);
+                image.CopyTo(stream);
+                updated.ImagePaths.Add("/uploads/" + image.FileName);
+            }
+
+            _service.Update(id, updated);
+            return RedirectToAction("Index");
+        }
 
     [Authorize(Roles = "Owner")]
     public IActionResult Delete(string id) {
