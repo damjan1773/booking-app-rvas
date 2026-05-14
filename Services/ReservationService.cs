@@ -41,4 +41,14 @@ public class ReservationService
 
         return !overlap;
     }
+    public void Create(Reservation reservation)
+    {
+        if (!IsAvailable(reservation.AccommodationId, reservation.CheckIn, reservation.CheckOut))
+            throw new InvalidOperationException("Smeštaj nije dostupan u izabranom terminu.");
+
+        _reservations.InsertOne(reservation);
+    }
+
+    public void DeleteByAccommodation(string accommodationId) =>
+        _reservations.DeleteMany(r => r.AccommodationId == accommodationId);
 }
