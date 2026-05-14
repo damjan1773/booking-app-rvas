@@ -30,4 +30,15 @@ public class ReservationService
 
     public void Delete(string id) =>
         _reservations.DeleteOne(r => r.Id == id);
+
+    public bool IsAvailable(string accommodationId, DateTime checkIn, DateTime checkOut)
+    {
+        var overlap = _reservations.Find(r =>
+            r.AccommodationId == accommodationId &&
+            r.CheckIn < checkOut &&
+            r.CheckOut > checkIn
+        ).Any();
+
+        return !overlap;
+    }
 }
