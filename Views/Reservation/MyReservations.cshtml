@@ -1,0 +1,53 @@
+@model List<Reservation>
+@{
+    ViewData["Title"] = "Moje rezervacije";
+    var accommodations = (Dictionary<string, Accommodation>)ViewBag.Accommodations;
+}
+
+<div class="container mt-4">
+    <h2>Moje rezervacije</h2>
+
+    @if (!Model.Any())
+    {
+        <p class="text-muted">Nemate još rezervacija.</p>
+    }
+    else
+    {
+        <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>Smeštaj</th>
+                    <th>Lokacija</th>
+                    <th>Dolazak</th>
+                    <th>Odlazak</th>
+                    <th>Broj noćenja</th>
+                    <th>Ukupna cena</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model)
+                {
+                    var acc = accommodations.ContainsKey(r.AccommodationId) ? accommodations[r.AccommodationId] : null;
+                    var nights = (r.CheckOut - r.CheckIn).Days;
+                    <tr>
+                        <td>
+                            @if (acc != null)
+                            {
+                                <a asp-controller="Accommodation" asp-action="Details" asp-route-id="@acc.Id">@acc.Name</a>
+                            }
+                            else
+                            {
+                                <span class="text-muted">(smeštaj obrisan)</span>
+                            }
+                        </td>
+                        <td>@(acc?.Location ?? "-")</td>
+                        <td>@r.CheckIn.ToString("dd.MM.yyyy")</td>
+                        <td>@r.CheckOut.ToString("dd.MM.yyyy")</td>
+                        <td>@nights</td>
+                        <td>@r.TotalPrice.ToString("0.00") €</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

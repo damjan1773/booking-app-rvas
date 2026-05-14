@@ -34,11 +34,34 @@
                 </div>
             }
 
+            @{
+                var upcoming = (List<Reservation>?)ViewBag.UpcomingReservations ?? new List<Reservation>();
+            }
+
+            <hr />
+            <h5>Zauzeti termini</h5>
+            @if (!upcoming.Any())
+            {
+                <p class="text-muted">Smeštaj je trenutno dostupan u svim terminima.</p>
+            }
+            else
+            {
+                <ul class="list-group mb-3">
+                    @foreach (var r in upcoming)
+                    {
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>📅 @r.CheckIn.ToString("dd.MM.yyyy") — @r.CheckOut.ToString("dd.MM.yyyy")</span>
+                            <span class="badge bg-danger">Zauzeto</span>
+                        </li>
+                    }
+                </ul>
+            }
+
             <hr />
             <div class="d-flex gap-2">
                 <a href="/Accommodation/Index" class="btn btn-secondary">Nazad</a>
                 @if (User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value == "Guest") {
-                    <a href="/Reservation/Create/@Model.Id" class="btn btn-success">Rezerviši</a>
+                    <a href="/Reservation/Create?accommodationId=@Model.Id" class="btn btn-success">Rezerviši</a>
                 }
                 @if (User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value == "Owner") {
                     <a href="/Accommodation/Edit/@Model.Id" class="btn btn-warning">Izmeni</a>

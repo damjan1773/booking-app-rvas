@@ -1,0 +1,46 @@
+@model List<Reservation>
+@{
+    ViewData["Title"] = "Rezervacije smeštaja";
+    var accommodation = (Accommodation)ViewBag.Accommodation;
+}
+
+<div class="container mt-4">
+    <h2>Rezervacije: @accommodation.Name</h2>
+    <p class="text-muted">@accommodation.Location</p>
+
+    @if (!Model.Any())
+    {
+        <p class="text-muted">Nema rezervacija za ovaj smeštaj.</p>
+    }
+    else
+    {
+        <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>Gost</th>
+                    <th>Dolazak</th>
+                    <th>Odlazak</th>
+                    <th>Broj noćenja</th>
+                    <th>Ukupna cena</th>
+                    <th>Rezervisano</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model)
+                {
+                    var nights = (r.CheckOut - r.CheckIn).Days;
+                    <tr>
+                        <td>@r.GuestName</td>
+                        <td>@r.CheckIn.ToString("dd.MM.yyyy")</td>
+                        <td>@r.CheckOut.ToString("dd.MM.yyyy")</td>
+                        <td>@nights</td>
+                        <td>@r.TotalPrice.ToString("0.00") €</td>
+                        <td>@r.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <a asp-controller="Accommodation" asp-action="Details" asp-route-id="@accommodation.Id" class="btn btn-secondary mt-3">Nazad na smeštaj</a>
+</div>

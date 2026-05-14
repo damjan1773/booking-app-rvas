@@ -15,6 +15,7 @@ builder.Services.AddSingleton<MongoDB.Driver.IMongoClient>(s =>
 // Registracija servisa
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<AccommodationService>();
+builder.Services.AddSingleton<ReservationService>();
 
 // Cookie autentifikacija
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
