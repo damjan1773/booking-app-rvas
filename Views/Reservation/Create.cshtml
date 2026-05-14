@@ -22,13 +22,15 @@
         <input type="hidden" asp-for="AccommodationId" />
 
         <div class="mb-3">
-            <label asp-for="CheckIn" class="form-label">Datum dolaska</label>
-            <input asp-for="CheckIn" type="date" class="form-control" required />
+            <label class="form-label">Datum dolaska</label>
+            <input name="CheckIn" type="date" class="form-control" required
+                   value="@(Model.CheckIn > DateTime.MinValue ? Model.CheckIn.ToString("yyyy-MM-dd") : "")" />
         </div>
 
         <div class="mb-3">
-            <label asp-for="CheckOut" class="form-label">Datum odlaska</label>
-            <input asp-for="CheckOut" type="date" class="form-control" required />
+            <label class="form-label">Datum odlaska</label>
+            <input name="CheckOut" type="date" class="form-control" required
+                   value="@(Model.CheckOut > DateTime.MinValue ? Model.CheckOut.ToString("yyyy-MM-dd") : "")" />
         </div>
 
         <button type="submit" class="btn btn-primary">Rezerviši</button>

@@ -32,16 +32,23 @@ public class ReservationController : Controller
         var accommodation = _accommodationService.GetById(reservation.AccommodationId);
         if (accommodation == null) return NotFound();
 
+        // ciscenje irelevantnih validacionih gresaka (server popunjava ova polja)
+        ModelState.Remove(nameof(Reservation.Id));
+        ModelState.Remove(nameof(Reservation.GuestId));
+        ModelState.Remove(nameof(Reservation.GuestName));
+
         if (reservation.CheckIn >= reservation.CheckOut)
         {
             ModelState.AddModelError("", "Datum odlaska mora biti posle datuma dolaska.");
-            ViewBag.Accommodation = accommodation;
-            return View(reservation);
         }
 
         if (reservation.CheckIn < DateTime.Today)
         {
             ModelState.AddModelError("", "Datum dolaska ne može biti u prošlosti.");
+        }
+
+        if (!ModelState.IsValid)
+        {
             ViewBag.Accommodation = accommodation;
             return View(reservation);
         }
@@ -65,6 +72,7 @@ public class ReservationController : Controller
 
         return RedirectToAction("MyReservations");
     }
+
     [HttpGet]
     [Authorize(Roles = "Guest")]
     public IActionResult MyReservations()
@@ -73,7 +81,10 @@ public class ReservationController : Controller
         var reservations = _reservationService.GetByGuest(guestId);
 
         var accommodations = reservations
-            .Select(r => _accommodationService.GetById(r.AccommodationId))
+            .Select(r => r.AccommodationId)
+            .Distinct()
+            .Select(id => _accommodationService.GetById(id))
+            .Where(a => a != null)
             .ToDictionary(a => a.Id, a => a);
 
         ViewBag.Accommodations = accommodations;

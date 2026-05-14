@@ -38,7 +38,7 @@
             <div class="d-flex gap-2">
                 <a href="/Accommodation/Index" class="btn btn-secondary">Nazad</a>
                 @if (User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value == "Guest") {
-                    <a href="/Reservation/Create/@Model.Id" class="btn btn-success">Rezerviši</a>
+                    <a href="/Reservation/Create?accommodationId=@Model.Id" class="btn btn-success">Rezerviši</a>
                 }
                 @if (User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value == "Owner") {
                     <a href="/Accommodation/Edit/@Model.Id" class="btn btn-warning">Izmeni</a>

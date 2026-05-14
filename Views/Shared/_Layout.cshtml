@@ -25,15 +25,31 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                           @if (User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value == "Owner")
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Accommodation" asp-action="Index">Smeštaji</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Accommodation" asp-action="Create">Dodaj smeštaj</a>
-                                </li>
-                            }
+
+                        @{
+                            var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+                        }
+
+                        @if (User.Identity!.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Accommodation" asp-action="Index">Smeštaji</a>
+                            </li>
+                        }
+
+                        @if (userRole == "Owner")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Accommodation" asp-action="Create">Dodaj smeštaj</a>
+                            </li>
+                        }
+
+                        @if (userRole == "Guest")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Reservation" asp-action="MyReservations">Moje rezervacije</a>
+                            </li>
+                        }
                     </ul>
                     <ul class="navbar-nav">
                         @if (User.Identity!.IsAuthenticated)
@@ -41,43 +57,43 @@
                             <li class="nav-item">
                                 <span class="nav-link text-dark">👤 @User.Identity.Name
                                     (@User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value)</span>
-                                </li>
-                                <li class="nav-item">
-                                    <form asp-controller="Account" asp-action="Logout" method="post">
-                                        <button type="submit" class="nav-link btn btn-link text-dark">Odjavi se</button>
-                                    </form>
-                                </li>
-                            }
+                            </li>
+                            <li class="nav-item">
+                                <form asp-controller="Account" asp-action="Logout" method="post">
+                                    <button type="submit" class="nav-link btn btn-link text-dark">Odjavi se</button>
+                                </form>
+                            </li>
+                        }
                         else
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Account"
-                                       asp-action="Register">Registracija</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Prijavi se</a>
-                                </li>
-                            }
-                        </ul>
-                    </div>
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account"
+                                   asp-action="Register">Registracija</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Prijavi se</a>
+                            </li>
+                        }
+                    </ul>
                 </div>
-            </nav>
-        </header>
-        <div class="container">
-            <main role="main" class="pb-3">
-                @RenderBody()
-            </main>
-        </div>
-
-        <footer class="border-top footer text-muted">
-            <div class="container">
-                &copy; 2026 - BookingApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
             </div>
-        </footer>
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-        @await RenderSectionAsync("Scripts", required: false)
-    </body>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2026 - BookingApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
 
 </html>
