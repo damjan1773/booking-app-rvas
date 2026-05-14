@@ -17,9 +17,10 @@ public class AccommodationController : Controller {
     }
 
     [AllowAnonymous]
-    public IActionResult Details(string id) {
+    public IActionResult Details(string id, [FromServices] ReservationService reservationService) {
         var accommodation = _service.GetById(id);
         if (accommodation == null) return NotFound();
+        ViewBag.UpcomingReservations = reservationService.GetUpcomingByAccommodation(id);
         return View(accommodation);
     }
 
@@ -79,10 +80,11 @@ public class AccommodationController : Controller {
         }
 
     [Authorize(Roles = "Owner")]
-    public IActionResult Delete(string id) {
+    public IActionResult Delete(string id, [FromServices] ReservationService reservationService) {
         var ownerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var existing = _service.GetById(id);
         if (existing.OwnerId != ownerId) return Forbid();
+        reservationService.DeleteByAccommodation(id);
         _service.Delete(id);
         return RedirectToAction("Index");
     }

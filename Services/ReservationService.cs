@@ -28,6 +28,12 @@ public class ReservationService
                      .SortBy(r => r.CheckIn)
                      .ToList();
 
+    public List<Reservation> GetUpcomingByAccommodation(string accommodationId) =>
+        _reservations.Find(r =>
+            r.AccommodationId == accommodationId &&
+            r.CheckOut >= DateTime.Today
+        ).SortBy(r => r.CheckIn).ToList();
+
     public void Delete(string id) =>
         _reservations.DeleteOne(r => r.Id == id);
 
