@@ -1,26 +1,106 @@
 @model List<Accommodation>
+@{
+    ViewData["Title"] = "Smeštaji";
+    var filterLocation = ViewBag.FilterLocation as string ?? "";
+    var filterAmenity = ViewBag.FilterAmenity as string ?? "";
+    var filterMaxPrice = ViewBag.FilterMaxPrice as decimal?;
+}
 
-<div class="container mt-4">
-    <h2>Svi smeštaji</h2>
-    <div class="row">
-        @foreach (var item in Model) {
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    @if (item.ImagePaths.Any()) {
-                        <img src="@item.ImagePaths[0]" class="card-img-top" style="height:200px; object-fit:cover;">
-                    }
-                    <div class="card-body">
-                        <h5 class="card-title">@item.Name</h5>
-                        <p class="card-text">📍 @item.Location</p>
-                        <p class="card-text">💰 @item.PricePerNight €/noć</p>
-                        <a href="/Accommodation/Details/@item.Id" class="btn btn-primary">Detalji</a>
-                        @if (User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value == "Owner") {
-                            <a href="/Accommodation/Edit/@item.Id" class="btn btn-warning">Izmeni</a>
-                            <a href="/Accommodation/Delete/@item.Id" class="btn btn-danger">Obriši</a>
+<div class="container">
+    <div class="page-header">
+        <h1><i class="bi bi-building text-booking me-2"></i>Pronađi smeštaj</h1>
+        <p>Pregledaj ponudu i rezerviši idealan termin.</p>
+    </div>
+
+    <div class="filter-panel">
+        <form asp-action="Index" method="get" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label" for="location">Lokacija</label>
+                <input type="text" id="location" name="location" class="form-control"
+                       placeholder="npr. Beograd, Zlatibor..." value="@filterLocation" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label" for="maxPrice">Maks. cena (€/noć)</label>
+                <input type="number" id="maxPrice" name="maxPrice" class="form-control" min="0" step="1"
+                       placeholder="npr. 50" value="@(filterMaxPrice?.ToString("0") ?? "")" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label" for="amenity">Pogodnost</label>
+                <input type="text" id="amenity" name="amenity" class="form-control"
+                       placeholder="npr. WiFi, Parking..." value="@filterAmenity" />
+            </div>
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search me-1"></i>Pretraži
+                </button>
+            </div>
+            @if (!string.IsNullOrWhiteSpace(filterLocation) || filterMaxPrice.HasValue || !string.IsNullOrWhiteSpace(filterAmenity))
+            {
+                <div class="col-12">
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-x-circle me-1"></i>Obriši filtere
+                    </a>
+                    <span class="text-muted ms-2 small">Pronađeno: @Model.Count smeštaja</span>
+                </div>
+            }
+        </form>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <i class="bi bi-house-x"></i>
+            <h4>Nema smeštaja za izabrane filtere</h4>
+            <p>Pokušaj sa drugačijim kriterijumima ili <a asp-action="Index">prikaži sve</a>.</p>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var item in Model)
+            {
+                <div class="col-sm-6 col-lg-4">
+                    <div class="card accommodation-card h-100">
+                        @if (item.ImagePaths.Any())
+                        {
+                            <img src="@item.ImagePaths[0]" class="card-img-top" alt="@item.Name" />
                         }
+                        else
+                        {
+                            <div class="card-img-placeholder">
+                                <i class="bi bi-image"></i>
+                            </div>
+                        }
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">@item.Name</h5>
+                            <p class="card-text text-muted mb-1">
+                                <i class="bi bi-geo-alt me-1"></i>@item.Location
+                            </p>
+                            <p class="price-tag mb-3">@item.PricePerNight.ToString("0") € / noć</p>
+                            @if (item.Amenities.Any())
+                            {
+                                <div class="mb-3">
+                                    @foreach (var am in item.Amenities.Take(3))
+                                    {
+                                        <span class="badge bg-light text-dark border me-1">@am</span>
+                                    }
+                                </div>
+                            }
+                            <div class="mt-auto d-flex flex-wrap gap-2">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
+                                    <i class="bi bi-eye me-1"></i>Detalji
+                                </a>
+                                @if (User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value == "Owner")
+                                {
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Izmeni</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm"
+                                       onclick="return confirm('Da li ste sigurni da želite da obrišete smeštaj?');">Obriši</a>
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
+            }
+        </div>
+    }
 </div>
