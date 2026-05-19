@@ -22,6 +22,37 @@ body {
   margin: 0;
   background-color: var(--booking-bg);
   color: #1e293b;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Blurovana pozadina */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: url("/images/bg-blur.jpg") center center / cover no-repeat;
+  filter: blur(12px) brightness(0.75);
+  transform: scale(1.06);
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(244, 247, 251, 0.92) 0%,
+    rgba(244, 247, 251, 0.85) 50%,
+    rgba(230, 240, 255, 0.9) 100%
+  );
+}
+
+main {
+  position: relative;
+  z-index: 1;
 }
 
 .bg-booking {
@@ -33,7 +64,8 @@ body {
 }
 
 .footer-booking {
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
   border-top: 1px solid #e2e8f0;
   color: #64748b;
 }
@@ -65,6 +97,8 @@ body {
   box-shadow: var(--booking-card-shadow);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   overflow: hidden;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(4px);
 }
 
 .accommodation-card:hover {
@@ -95,7 +129,8 @@ body {
 
 /* Filter panel */
 .filter-panel {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(6px);
   border-radius: 0.75rem;
   box-shadow: var(--booking-card-shadow);
   padding: 1.25rem;
@@ -108,6 +143,7 @@ body {
   border-radius: 0.75rem;
   box-shadow: var(--booking-card-shadow);
   overflow: hidden;
+  background: rgba(255, 255, 255, 0.98);
 }
 
 .details-carousel .carousel-item img {
@@ -135,7 +171,8 @@ body {
 
 /* Forme */
 .form-card {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(6px);
   border-radius: 0.75rem;
   box-shadow: var(--booking-card-shadow);
   padding: 2rem;
@@ -147,7 +184,8 @@ body {
 
 /* Auth */
 .auth-card {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(6px);
   border-radius: 0.75rem;
   box-shadow: var(--booking-card-shadow);
   padding: 2rem;
@@ -155,7 +193,8 @@ body {
 
 /* Tabele rezervacija */
 .table-booking {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(4px);
   border-radius: 0.75rem;
   overflow: hidden;
   box-shadow: var(--booking-card-shadow);
@@ -184,12 +223,13 @@ body {
 }
 
 .hero-home {
-  background: linear-gradient(135deg, var(--booking-primary) 0%, var(--booking-primary-dark) 100%);
+  background: linear-gradient(135deg, rgba(13, 110, 253, 0.95) 0%, rgba(10, 88, 202, 0.95) 100%);
   color: #fff;
   border-radius: 1rem;
   padding: 3rem 2rem;
   margin-bottom: 2rem;
   box-shadow: var(--booking-card-shadow);
+  backdrop-filter: blur(4px);
 }
 
 .btn:focus,
