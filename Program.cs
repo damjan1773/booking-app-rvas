@@ -16,6 +16,7 @@ builder.Services.AddSingleton<MongoDB.Driver.IMongoClient>(s =>
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<AccommodationService>();
 builder.Services.AddSingleton<ReservationService>();
+builder.Services.AddSingleton<AccommodationImageSeeder>();
 
 // Cookie autentifikacija
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -29,6 +30,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    scope.ServiceProvider.GetRequiredService<AccommodationImageSeeder>().SeedIfNeeded();
+}
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
