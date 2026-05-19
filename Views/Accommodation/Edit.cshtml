@@ -1,27 +1,48 @@
 @model Accommodation
+@{
+    ViewData["Title"] = "Izmeni smeštaj";
+}
 
-<div class="container mt-4">
-    <h2>Izmeni smeštaj</h2>
-    <form method="post" enctype="multipart/form-data">
-        <input type="hidden" asp-for="Id" />
-        <input type="hidden" asp-for="OwnerId" />
-        <div class="mb-3">
-            <label>Naziv</label>
-            <input asp-for="Name" class="form-control" required />
-        </div>
-        <div class="mb-3">
-            <label>Lokacija</label>
-            <input asp-for="Location" class="form-control" required />
-        </div>
-        <div class="mb-3">
-            <label>Opis</label>
-            <textarea asp-for="Description" class="form-control"></textarea>
-        </div>
-        <div class="mb-3">
-            <label>Cena po noći (€)</label>
-            <input asp-for="PricePerNight" type="number" class="form-control" required />
-        </div>
-        <button type="submit" class="btn btn-primary">Sačuvaj izmene</button>
-        <a href="/Accommodation/Index" class="btn btn-secondary">Odustani</a>
-    </form>
+<div class="container">
+    <div class="page-header">
+        <h2><i class="bi bi-pencil-square text-booking me-2"></i>Izmeni smeštaj</h2>
+        <p>Ažuriraj podatke za @Model.Name</p>
+    </div>
+
+    <div class="form-card">
+        <form method="post" enctype="multipart/form-data" novalidate>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="OwnerId" />
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">Naziv</label>
+                <input asp-for="Name" class="form-control" required minlength="2" maxlength="100" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="Location" class="form-label">Lokacija</label>
+                <input asp-for="Location" class="form-control" required minlength="2" maxlength="100" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label">Opis</label>
+                <textarea asp-for="Description" class="form-control" rows="4" required minlength="10"></textarea>
+            </div>
+            <div class="mb-3">
+                <label asp-for="PricePerNight" class="form-label">Cena po noći (€)</label>
+                <input asp-for="PricePerNight" type="number" class="form-control" required min="1" max="10000" step="0.01" />
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Nova slika (opciono)</label>
+                <input type="file" name="image" class="form-control" accept="image/*" />
+                @if (Model.ImagePaths.Any())
+                {
+                    <div class="form-text mt-2">Trenutno @Model.ImagePaths.Count slika u galeriji.</div>
+                }
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save me-1"></i>Sačuvaj izmene
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">Odustani</a>
+            </div>
+        </form>
+    </div>
 </div>
