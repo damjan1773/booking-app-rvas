@@ -11,9 +11,25 @@ public class AccommodationController : Controller {
     }
 
     [AllowAnonymous]
-    public IActionResult Index() {
-        var accommodations = _service.GetAll();
-        return View(accommodations);
+    public IActionResult Index(string? location, decimal? maxPrice, string? amenity) {
+        var results = _service.GetAll().AsEnumerable();
+
+        if (!string.IsNullOrWhiteSpace(location))
+            results = results.Where(a => a.Location.Contains(location, StringComparison.OrdinalIgnoreCase));
+
+        if (maxPrice.HasValue)
+            results = results.Where(a => a.PricePerNight <= maxPrice.Value);
+
+        if (!string.IsNullOrWhiteSpace(amenity))
+            results = results.Where(a =>
+                (a.Amenities ?? new List<string>()).Any(am =>
+                    am.Contains(amenity, StringComparison.OrdinalIgnoreCase)));
+
+        ViewBag.FilterLocation = location;
+        ViewBag.FilterMaxPrice = maxPrice;
+        ViewBag.FilterAmenity = amenity;
+
+        return View(results.ToList());
     }
 
     [AllowAnonymous]
