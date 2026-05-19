@@ -1,56 +1,101 @@
 @model Accommodation
+@{
+    ViewData["Title"] = Model.Name;
+    var upcoming = (List<Reservation>?)ViewBag.UpcomingReservations ?? new List<Reservation>();
+    var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+}
 
-<div class="container mt-4">
-    <div class="card shadow">
-        @if (Model.ImagePaths.Any()) {
-            <img src="@Model.ImagePaths[0]" class="card-img-top" style="height:350px; object-fit:cover;">
-        }
-        <div class="card-body">
-            <h2 class="card-title">@Model.Name</h2>
-            <p class="text-muted">📍 @Model.Location</p>
-            <hr />
-            <p>@Model.Description</p>
-            <h4 class="text-success">💰 @Model.PricePerNight €/noć</h4>
-
-            @if (Model.Amenities.Any()) {
-                <hr />
-                <h5>Pogodnosti:</h5>
-                <div class="d-flex flex-wrap gap-2">
-                    @foreach (var amenity in Model.Amenities) {
-                        <span class="badge bg-secondary fs-6">@amenity</span>
+<div class="container">
+    <div class="details-card card mb-4">
+        @if (Model.ImagePaths.Any())
+        {
+            <div id="accommodationCarousel" class="carousel slide details-carousel" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    @for (var i = 0; i < Model.ImagePaths.Count; i++)
+                    {
+                        <button type="button" data-bs-target="#accommodationCarousel" data-bs-slide-to="@i"
+                                class="@(i == 0 ? "active" : "")" aria-label="Slika @(i + 1)"></button>
                     }
                 </div>
-            }
-
-            @if (Model.ImagePaths.Count > 1) {
-                <hr />
-                <h5>Galerija:</h5>
-                <div class="row">
-                    @foreach (var img in Model.ImagePaths.Skip(1)) {
-                        <div class="col-md-4 mb-3">
-                            <img src="@img" class="img-fluid rounded shadow-sm">
+                <div class="carousel-inner">
+                    @for (var i = 0; i < Model.ImagePaths.Count; i++)
+                    {
+                        <div class="carousel-item @(i == 0 ? "active" : "")">
+                            <img src="@Model.ImagePaths[i]" class="d-block w-100" alt="@Model.Name — slika @(i + 1)" />
                         </div>
                     }
                 </div>
-            }
+                @if (Model.ImagePaths.Count > 1)
+                {
+                    <button class="carousel-control-prev" type="button" data-bs-target="#accommodationCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Prethodna</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#accommodationCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Sledeća</span>
+                    </button>
+                }
+            </div>
 
-            @{
-                var upcoming = (List<Reservation>?)ViewBag.UpcomingReservations ?? new List<Reservation>();
+            @if (Model.ImagePaths.Count > 1)
+            {
+                <div class="p-3 bg-light">
+                    <h6 class="text-muted mb-3">Galerija</h6>
+                    <div class="row g-2">
+                        @foreach (var img in Model.ImagePaths)
+                        {
+                            <div class="col-4 col-md-3">
+                                <img src="@img" class="gallery-thumb w-100" alt="Galerija @Model.Name" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="card-img-placeholder" style="height: 300px;">
+                <i class="bi bi-image"></i>
+            </div>
+        }
+
+        <div class="card-body p-4">
+            <h1 class="h2 mb-2">@Model.Name</h1>
+            <p class="text-muted fs-5 mb-3">
+                <i class="bi bi-geo-alt-fill me-1"></i>@Model.Location
+            </p>
+            <p class="lead">@Model.Description</p>
+            <p class="price-tag fs-4">@Model.PricePerNight.ToString("0") € / noć</p>
+
+            @if (Model.Amenities.Any())
+            {
+                <hr />
+                <h5><i class="bi bi-stars me-1"></i>Pogodnosti</h5>
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    @foreach (var amenity in Model.Amenities)
+                    {
+                        <span class="badge bg-primary fs-6">@amenity</span>
+                    }
+                </div>
             }
 
             <hr />
-            <h5>Zauzeti termini</h5>
+            <h5><i class="bi bi-calendar-x me-1"></i>Zauzeti termini</h5>
             @if (!upcoming.Any())
             {
                 <p class="text-muted">Smeštaj je trenutno dostupan u svim terminima.</p>
             }
             else
             {
-                <ul class="list-group mb-3">
+                <ul class="list-group list-group-flush mb-3">
                     @foreach (var r in upcoming)
                     {
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>📅 @r.CheckIn.ToString("dd.MM.yyyy") — @r.CheckOut.ToString("dd.MM.yyyy")</span>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            <span>
+                                <i class="bi bi-calendar-range me-1"></i>
+                                @r.CheckIn.ToString("dd.MM.yyyy") — @r.CheckOut.ToString("dd.MM.yyyy")
+                            </span>
                             <span class="badge bg-danger">Zauzeto</span>
                         </li>
                     }
@@ -58,14 +103,26 @@
             }
 
             <hr />
-            <div class="d-flex gap-2">
-                <a href="/Accommodation/Index" class="btn btn-secondary">Nazad</a>
-                @if (User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value == "Guest") {
-                    <a href="/Reservation/Create?accommodationId=@Model.Id" class="btn btn-success">Rezerviši</a>
+            <div class="d-flex flex-wrap gap-2">
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>Nazad
+                </a>
+                @if (userRole == "Guest")
+                {
+                    <a asp-controller="Reservation" asp-action="Create" asp-route-accommodationId="@Model.Id"
+                       class="btn btn-success">
+                        <i class="bi bi-calendar-plus me-1"></i>Rezerviši
+                    </a>
                 }
-                @if (User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value == "Owner") {
-                    <a href="/Accommodation/Edit/@Model.Id" class="btn btn-warning">Izmeni</a>
-                    <a href="/Accommodation/Delete/@Model.Id" class="btn btn-danger">Obriši</a>
+                @if (userRole == "Owner")
+                {
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Izmeni</a>
+                    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger"
+                       onclick="return confirm('Da li ste sigurni?');">Obriši</a>
+                    <a asp-controller="Reservation" asp-action="AccommodationReservations" asp-route-accommodationId="@Model.Id"
+                       class="btn btn-outline-primary">
+                        <i class="bi bi-list-ul me-1"></i>Rezervacije
+                    </a>
                 }
             </div>
         </div>
