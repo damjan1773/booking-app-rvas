@@ -4,50 +4,63 @@
     var accommodations = (Dictionary<string, Accommodation>)ViewBag.Accommodations;
 }
 
-<div class="container mt-4">
-    <h2>Moje rezervacije</h2>
+<div class="container">
+    <div class="page-header">
+        <h2><i class="bi bi-calendar-check text-booking me-2"></i>Moje rezervacije</h2>
+        <p>Pregled svih tvojih rezervacija.</p>
+    </div>
 
     @if (!Model.Any())
     {
-        <p class="text-muted">Nemate još rezervacija.</p>
+        <div class="empty-state">
+            <i class="bi bi-calendar-x"></i>
+            <h4>Nemaš još rezervacija</h4>
+            <p>
+                <a asp-controller="Accommodation" asp-action="Index" class="btn btn-primary mt-2">
+                    Pronađi smeštaj
+                </a>
+            </p>
+        </div>
     }
     else
     {
-        <table class="table table-striped mt-3">
-            <thead>
-                <tr>
-                    <th>Smeštaj</th>
-                    <th>Lokacija</th>
-                    <th>Dolazak</th>
-                    <th>Odlazak</th>
-                    <th>Broj noćenja</th>
-                    <th>Ukupna cena</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var r in Model)
-                {
-                    var acc = accommodations.ContainsKey(r.AccommodationId) ? accommodations[r.AccommodationId] : null;
-                    var nights = (r.CheckOut - r.CheckIn).Days;
+        <div class="table-responsive table-booking">
+            <table class="table table-hover mb-0">
+                <thead>
                     <tr>
-                        <td>
-                            @if (acc != null)
-                            {
-                                <a asp-controller="Accommodation" asp-action="Details" asp-route-id="@acc.Id">@acc.Name</a>
-                            }
-                            else
-                            {
-                                <span class="text-muted">(smeštaj obrisan)</span>
-                            }
-                        </td>
-                        <td>@(acc?.Location ?? "-")</td>
-                        <td>@r.CheckIn.ToString("dd.MM.yyyy")</td>
-                        <td>@r.CheckOut.ToString("dd.MM.yyyy")</td>
-                        <td>@nights</td>
-                        <td>@r.TotalPrice.ToString("0.00") €</td>
+                        <th>Smeštaj</th>
+                        <th>Lokacija</th>
+                        <th>Dolazak</th>
+                        <th>Odlazak</th>
+                        <th>Noćenja</th>
+                        <th>Ukupno</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var r in Model)
+                    {
+                        var acc = accommodations.ContainsKey(r.AccommodationId) ? accommodations[r.AccommodationId] : null;
+                        var nights = (r.CheckOut - r.CheckIn).Days;
+                        <tr>
+                            <td>
+                                @if (acc != null)
+                                {
+                                    <a asp-controller="Accommodation" asp-action="Details" asp-route-id="@acc.Id" class="fw-semibold">@acc.Name</a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">(obrisan)</span>
+                                }
+                            </td>
+                            <td>@(acc?.Location ?? "-")</td>
+                            <td>@r.CheckIn.ToString("dd.MM.yyyy")</td>
+                            <td>@r.CheckOut.ToString("dd.MM.yyyy")</td>
+                            <td>@nights</td>
+                            <td class="fw-semibold text-success">@r.TotalPrice.ToString("0.00") €</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     }
 </div>

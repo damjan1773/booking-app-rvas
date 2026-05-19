@@ -1,5 +1,15 @@
+:root {
+  --booking-primary: #0d6efd;
+  --booking-primary-dark: #0a58ca;
+  --booking-accent: #20c997;
+  --booking-bg: #f4f7fb;
+  --booking-card-shadow: 0 0.5rem 1.25rem rgba(15, 23, 42, 0.08);
+}
+
 html {
   font-size: 14px;
+  position: relative;
+  min-height: 100%;
 }
 
 @media (min-width: 768px) {
@@ -8,24 +18,224 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
 body {
-  margin-bottom: 60px;
+  margin: 0;
+  background-color: var(--booking-bg);
+  color: #1e293b;
+  position: relative;
+  min-height: 100vh;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+/* Blurovana pozadina */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: url("/images/bg-blur.jpg") center center / cover no-repeat;
+  filter: blur(12px) brightness(0.75);
+  transform: scale(1.06);
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(244, 247, 251, 0.92) 0%,
+    rgba(244, 247, 251, 0.85) 50%,
+    rgba(230, 240, 255, 0.9) 100%
+  );
+}
+
+main {
+  position: relative;
+  z-index: 1;
+}
+
+.bg-booking {
+  background: linear-gradient(135deg, var(--booking-primary) 0%, var(--booking-primary-dark) 100%) !important;
+}
+
+.text-booking {
+  color: var(--booking-primary) !important;
+}
+
+.footer-booking {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid #e2e8f0;
+  color: #64748b;
+}
+
+.user-badge {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.page-header {
+  margin-bottom: 1.5rem;
+}
+
+.page-header h1,
+.page-header h2 {
+  margin-bottom: 0.25rem;
+  font-weight: 700;
+}
+
+.page-header p {
+  color: #64748b;
+  margin-bottom: 0;
+}
+
+/* Kartice smeštaja */
+.accommodation-card {
+  border: none;
+  border-radius: 0.75rem;
+  box-shadow: var(--booking-card-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(4px);
+}
+
+.accommodation-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0.75rem 1.5rem rgba(15, 23, 42, 0.12);
+}
+
+.accommodation-card .card-img-top,
+.accommodation-card .card-img-placeholder {
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-img-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+  color: #64748b;
+  font-size: 3rem;
+}
+
+.price-tag {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--booking-accent);
+}
+
+/* Filter panel */
+.filter-panel {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(6px);
+  border-radius: 0.75rem;
+  box-shadow: var(--booking-card-shadow);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Detalji i galerija */
+.details-card {
+  border: none;
+  border-radius: 0.75rem;
+  box-shadow: var(--booking-card-shadow);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.98);
+}
+
+.details-carousel .carousel-item img {
+  height: 400px;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .details-carousel .carousel-item img {
+    height: 250px;
+  }
+}
+
+.gallery-thumb {
+  height: 120px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.gallery-thumb:hover {
+  opacity: 0.85;
+}
+
+/* Forme */
+.form-card {
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(6px);
+  border-radius: 0.75rem;
+  box-shadow: var(--booking-card-shadow);
+  padding: 2rem;
+}
+
+.form-card .form-label {
+  font-weight: 600;
+}
+
+/* Auth */
+.auth-card {
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(6px);
+  border-radius: 0.75rem;
+  box-shadow: var(--booking-card-shadow);
+  padding: 2rem;
+}
+
+/* Tabele rezervacija */
+.table-booking {
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(4px);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: var(--booking-card-shadow);
+}
+
+.table-booking thead {
+  background-color: var(--booking-primary);
+  color: #fff;
+}
+
+.table-booking thead th {
+  border: none;
+  font-weight: 600;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #64748b;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.hero-home {
+  background: linear-gradient(135deg, rgba(13, 110, 253, 0.95) 0%, rgba(10, 88, 202, 0.95) 100%);
+  color: #fff;
+  border-radius: 1rem;
+  padding: 3rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--booking-card-shadow);
+  backdrop-filter: blur(4px);
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }

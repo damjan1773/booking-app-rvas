@@ -4,36 +4,50 @@
     var accommodation = (Accommodation)ViewBag.Accommodation;
 }
 
-<div class="container mt-4">
-    <h2>Rezervacija: @accommodation.Name</h2>
-    <p class="text-muted">@accommodation.Location — @accommodation.PricePerNight.ToString("0.00") € po noći</p>
+<div class="container">
+    <div class="page-header">
+        <h2><i class="bi bi-calendar-plus text-booking me-2"></i>Rezervacija</h2>
+        <p>
+            <strong>@accommodation.Name</strong> — @accommodation.Location
+            <span class="badge bg-success ms-1">@accommodation.PricePerNight.ToString("0.00") € / noć</span>
+        </p>
+    </div>
 
-    @if (!ViewData.ModelState.IsValid)
-    {
-        <div class="alert alert-danger">
-            @foreach (var err in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-            {
-                <div>@err.ErrorMessage</div>
-            }
-        </div>
-    }
+    <div class="form-card col-lg-6">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                @foreach (var err in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <div>@err.ErrorMessage</div>
+                }
+            </div>
+        }
 
-    <form asp-action="Create" method="post" class="mt-3">
-        <input type="hidden" asp-for="AccommodationId" />
+        <form asp-action="Create" method="post" novalidate>
+            <input type="hidden" asp-for="AccommodationId" />
 
-        <div class="mb-3">
-            <label class="form-label">Datum dolaska</label>
-            <input name="CheckIn" type="date" class="form-control" required
-                   value="@(Model.CheckIn > DateTime.MinValue ? Model.CheckIn.ToString("yyyy-MM-dd") : "")" />
-        </div>
+            <div class="mb-3">
+                <label class="form-label" for="CheckIn">Datum dolaska</label>
+                <input name="CheckIn" id="CheckIn" type="date" class="form-control" required
+                       min="@DateTime.Today.ToString("yyyy-MM-dd")"
+                       value="@(Model.CheckIn > DateTime.MinValue ? Model.CheckIn.ToString("yyyy-MM-dd") : "")" />
+            </div>
 
-        <div class="mb-3">
-            <label class="form-label">Datum odlaska</label>
-            <input name="CheckOut" type="date" class="form-control" required
-                   value="@(Model.CheckOut > DateTime.MinValue ? Model.CheckOut.ToString("yyyy-MM-dd") : "")" />
-        </div>
+            <div class="mb-4">
+                <label class="form-label" for="CheckOut">Datum odlaska</label>
+                <input name="CheckOut" id="CheckOut" type="date" class="form-control" required
+                       min="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")"
+                       value="@(Model.CheckOut > DateTime.MinValue ? Model.CheckOut.ToString("yyyy-MM-dd") : "")" />
+            </div>
 
-        <button type="submit" class="btn btn-primary">Rezerviši</button>
-        <a asp-controller="Accommodation" asp-action="Details" asp-route-id="@accommodation.Id" class="btn btn-secondary">Otkaži</a>
-    </form>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-check-lg me-1"></i>Rezerviši
+                </button>
+                <a asp-controller="Accommodation" asp-action="Details" asp-route-id="@accommodation.Id"
+                   class="btn btn-secondary">Otkaži</a>
+            </div>
+        </form>
+    </div>
 </div>
